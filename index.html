@@ -1,143 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Search Box</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search / Contact</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 650px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 55px;
-      margin-bottom: 30px;
-      font-weight: 500;
-    }
-
-    .search-form {
-      width: 100%;
-    }
-
-    .search-box {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: 55px;
-      border: 1px solid #dfe1e5;
-      border-radius: 30px;
-      padding-left: 20px;
-      padding-right: 7px;
-      box-shadow: 0 1px 6px rgba(32, 33, 36, 0.15);
-    }
-
-    .search-box:focus-within {
-      box-shadow: 0 1px 8px rgba(32, 33, 36, 0.25);
-    }
-
-    .search-icon {
-      font-size: 20px;
-      margin-right: 12px;
-    }
-
-    .search-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 17px;
-    }
-
-    .search-input::placeholder {
-      color: #777;
-    }
-
-    .search-button {
-      border: none;
-      background: #4285f4;
-      color: white;
-      padding: 11px 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    .search-button:hover {
-      background: #3367d6;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        width: 95%;
-      }
-
-      h1 {
-        font-size: 40px;
-      }
-
-      .search-input {
-        font-size: 14px;
-      }
-
-      .search-button {
-        padding: 10px 14px;
-      }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: white;
+      display:flex; justify-content:center; align-items:center; height:100vh;}
+    .container { width:90%; max-width:650px; text-align:center; }
+    h1 { font-size:55px; margin-bottom:30px; font-weight:500; }
+    .search-box { display:flex; align-items:center; width:100%; height:55px;
+      border:1px solid #dfe1e5; border-radius:30px; padding-left:20px; padding-right:7px;
+      box-shadow:0 1px 6px rgba(32,33,36,0.15); }
+    .search-box:focus-within { box-shadow:0 1px 8px rgba(32,33,36,0.25); }
+    .search-icon { font-size:20px; margin-right:12px; }
+    .search-input { flex:1; border:none; outline:none; font-size:17px; }
+    .search-input::placeholder { color:#777; }
+    .search-button { border:none; background:#4285f4; color:white; padding:11px 20px;
+      border-radius:25px; cursor:pointer; font-size:15px; }
+    .search-button:hover { background:#3367d6; }
+    textarea.message { width:100%; margin-top:12px; min-height:90px; padding:10px;
+      border:1px solid #dfe1e5; border-radius:8px; font-size:15px; resize:vertical; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+      clip:rect(0,0,0,0); border:0; }
+    @media (max-width:600px) {
+      .container{ width:95% } h1{ font-size:40px } .search-input{ font-size:14px }
+      .search-button{ padding:10px 14px }
     }
   </style>
 </head>
-
 <body>
-
   <div class="container">
+    <h1>Search / Contact</h1>
 
-    <h1>Search</h1>
+    <!-- keep POST to Formspree; we submit via fetch so user stays on page -->
+    <form id="contactForm" action="https://formspree.io/f/mwleogkk" method="POST" role="search" aria-label="Site search and contact">
+      <div class="search-box" aria-hidden="false">
+        <span class="search-icon" aria-hidden="true">🔍</span>
 
-    <form
-      action="https://formspree.io/f/mwleogkk"
-      method="POST"
-    >
+        <label for="search_query" class="sr-only">Search query</label>
+        <input id="search_query" type="text" name="search_query" class="search-input" placeholder="Search..." required>
 
-      <div class="search-box">
-
-        <span class="search-icon">🔍</span>
-
-        <input
-          type="text"
-          name="search_query"
-          class="search-input"
-          placeholder="Search..."
-          required
-        >
-
-        <button
-          type="submit"
-          class="search-button"
-        >
-          Search
-        </button>
-
+        <button type="submit" class="search-button">Search</button>
       </div>
 
+      <!-- textarea named "message" so Formspree will include it in the submission -->
+      <label for="message" class="sr-only">Message</label>
+      <textarea id="message" name="message" class="message" placeholder="Optional message or details..."></textarea>
+
+      <!-- optional reply-to email so Formspree shows a reply address -->
+      <input type="email" name="_replyto" placeholder="Your email (optional)" style="width:100%; margin-top:8px; padding:10px; border:1px solid #dfe1e5; border-radius:8px;">
+
+      <!-- optional hidden subject -->
+      <input type="hidden" name="_subject" value="New submission from website">
     </form>
 
+    <div id="formStatus" aria-live="polite" style="margin-top:12px;"></div>
   </div>
 
+  <script>
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('formStatus');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = 'Sending...';
+      const data = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: form.method,
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          // show success and optionally clear the form
+          status.textContent = 'Thanks — your message was sent!';
+          form.reset();
+        } else {
+          const json = await res.json();
+          status.textContent = json?.error || 'Oops — there was a problem sending your message.';
+        }
+      } catch (err) {
+        status.textContent = 'Network error — please try again.';
+        console.error(err);
+      }
+    });
+  </script>
 </body>
 </html>
