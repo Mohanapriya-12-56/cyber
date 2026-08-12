@@ -14,7 +14,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #ffffff;
+      background: white;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -22,17 +22,15 @@
     }
 
     .container {
-      width: 100%;
+      width: 90%;
       max-width: 650px;
-      padding: 20px;
       text-align: center;
     }
 
-    .logo {
+    h1 {
       font-size: 55px;
-      font-weight: 500;
       margin-bottom: 30px;
-      letter-spacing: -3px;
+      font-weight: 500;
     }
 
     .search-form {
@@ -43,22 +41,20 @@
       display: flex;
       align-items: center;
       width: 100%;
-      height: 52px;
+      height: 55px;
       border: 1px solid #dfe1e5;
       border-radius: 30px;
-      padding: 0 8px 0 18px;
+      padding-left: 20px;
+      padding-right: 7px;
       box-shadow: 0 1px 6px rgba(32, 33, 36, 0.15);
-      transition: box-shadow 0.2s;
     }
 
-    .search-box:hover,
     .search-box:focus-within {
       box-shadow: 0 1px 8px rgba(32, 33, 36, 0.25);
     }
 
     .search-icon {
       font-size: 20px;
-      color: #777;
       margin-right: 12px;
     }
 
@@ -67,7 +63,6 @@
       border: none;
       outline: none;
       font-size: 17px;
-      color: #202124;
     }
 
     .search-input::placeholder {
@@ -78,41 +73,31 @@
       border: none;
       background: #4285f4;
       color: white;
-      padding: 10px 20px;
-      border-radius: 22px;
-      font-size: 15px;
+      padding: 11px 20px;
+      border-radius: 25px;
       cursor: pointer;
+      font-size: 15px;
     }
 
     .search-button:hover {
       background: #3367d6;
     }
 
-    #message {
-      margin-top: 25px;
-      font-size: 16px;
-      color: #333;
-    }
-
     @media (max-width: 600px) {
       .container {
-        padding: 15px;
+        width: 95%;
       }
 
-      .logo {
-        font-size: 42px;
-      }
-
-      .search-box {
-        height: 48px;
+      h1 {
+        font-size: 40px;
       }
 
       .search-input {
-        font-size: 15px;
+        font-size: 14px;
       }
 
       .search-button {
-        padding: 9px 14px;
+        padding: 10px 14px;
       }
     }
   </style>
@@ -122,16 +107,11 @@
 
   <div class="container">
 
-    <div class="logo">
-      Search
-    </div>
+    <h1>Search</h1>
 
-    <!-- Formspree Form -->
     <form
-      class="search-form"
       action="https://formspree.io/f/mwleogkk"
       method="POST"
-      onsubmit="showMessage()"
     >
 
       <div class="search-box">
@@ -146,7 +126,10 @@
           required
         >
 
-        <button type="submit" class="search-button">
+        <button
+          type="submit"
+          class="search-button"
+        >
           Search
         </button>
 
@@ -154,16 +137,7 @@
 
     </form>
 
-    <p id="message"></p>
-
   </div>
-
-  <script>
-    function showMessage() {
-      document.getElementById("message").innerText =
-        "Your search has been submitted successfully!";
-    }
-  </script>
 
 </body>
 </html>
